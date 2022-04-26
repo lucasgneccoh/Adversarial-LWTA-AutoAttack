@@ -3,12 +3,12 @@
 # Use dictionary to make it more flexible (https://www.xmodulo.com/key-value-dictionary-bash.html
 declare -A args
 
-args[epochs]="50"
-args[log_interval]="10"
-args[model_dir]="./model_test"
-args[train_nat]="bool:1"
-args[no_cuda]="bool:1"
-args[save_freq]="30"
+#args[epochs]="50"
+#args[log_interval]="10"
+args[model_dir]="./run_first_test&"
+#args[train_nat]="bool:1"
+#args[no_cuda]="bool:1"
+#args[save_freq]="30"
 args[data_path]="./data/cifar10"
 
 # This can be obtained from the system
