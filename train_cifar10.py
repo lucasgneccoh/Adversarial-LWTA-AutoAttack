@@ -55,6 +55,9 @@ parser.add_argument('--no-early-stop', action='store_true', default=False,
                     help='not use early stop learning rate schedule')
 parser.add_argument('--beta', type=float, default=6.0,
                     help='lambda parameter of robust regularization')
+parser.add_argument('--data-path', type=str, default='./data',
+                    help='path to store the downloaded dataset')
+
 
 args = parser.parse_args()
 
@@ -77,9 +80,10 @@ transform_train = transforms.Compose([
 transform_test = transforms.Compose([
     transforms.ToTensor(),
 ])
-trainset = torchvision.datasets.CIFAR10(root='~/data', train=True, download=True, transform=transform_train)
+data_path = args.data_path 
+trainset = torchvision.datasets.CIFAR10(root=data_path, train=True, download=True, transform=transform_train)
 train_loader = torch.utils.data.DataLoader(trainset, batch_size=args.batch_size, shuffle=True, **kwargs)
-testset = torchvision.datasets.CIFAR10(root='~/data', train=False, download=True, transform=transform_test)
+testset = torchvision.datasets.CIFAR10(root=data_path, train=False, download=True, transform=transform_test)
 test_loader = torch.utils.data.DataLoader(testset, batch_size=args.test_batch_size, shuffle=False, **kwargs)
 
 writer = SummaryWriter(os.path.join(model_dir,'summary'))
@@ -105,7 +109,7 @@ def train(args, model, device, train_loader, optimizer, epoch, beta):
             loss, x_adv = adv_loss_func(
                 model=model, x_natural=data, y=target, optimizer=optimizer,
                 step_size=args.step_size, epsilon=args.epsilon, perturb_steps=args.num_steps,
-                beta=beta)
+                beta=beta, device=device)
         
         loss.backward()
 

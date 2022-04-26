@@ -12,12 +12,16 @@ def madry_loss(model,
                step_size=0.007,
                epsilon=0.031,
                perturb_steps=10,
-               beta=1.0):
+               beta=1.0,
+               device=torch.device('cpu')):
     # define KL-loss
     model.eval()
     batch_size = len(x_natural)
     # generate adversarial example
-    x_adv = x_natural.detach() + 0.001 * torch.randn(x_natural.shape).cuda().detach()
+    if not device.type=='cpu':
+        x_adv = x_natural.detach() + 0.001 * torch.randn(x_natural.shape).cuda().detach()
+    else:
+        x_adv = x_natural.detach() + 0.001 * torch.randn(x_natural.shape).detach()
 
     for _ in range(perturb_steps):
         x_adv.requires_grad_()

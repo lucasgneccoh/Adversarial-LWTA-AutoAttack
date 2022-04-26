@@ -23,6 +23,9 @@ parser.add_argument('--autoattack', action='store_true', default=True,
                     help='whether perform white-box attack')
 parser.add_argument('--width', type=int, default=1,
                     help='width of networks')
+parser.add_argument('--data_path', type=str, default='./data',
+                    help='path to store the downloaded dataset')
+
 
 args = parser.parse_args()
 
@@ -34,7 +37,8 @@ kwargs = {'num_workers': 1, 'pin_memory': True} if use_cuda else {}
 
 # set up data loader
 transform_test = transforms.Compose([transforms.ToTensor(),])
-testset = torchvision.datasets.CIFAR10(root='~/data', train=False, download=True, transform=transform_test)
+data_path = args.data_path 
+testset = torchvision.datasets.CIFAR10(root=data_path, train=False, download=True, transform=transform_test)
 test_loader = torch.utils.data.DataLoader(testset, batch_size=args.test_batch_size, shuffle=False, **kwargs)
 
 
